@@ -1,27 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AJ's V-TAPER SYSTEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="hero">
+    <header class="hero" id="home">
       <nav class="nav">
         <div class="logo">AJ's V-TAPER SYSTEM</div>
-        <div class="nav-links">
-          <a href="#home">Home</a>
-          <a href="#schedule">Schedule</a>
-          <a href="#diet">Diet</a>
-          <a href="#workouts">Workouts</a>
-          <a href="#abs">Abs</a>
-          <a href="#reset">Reset</a>
-          <a href="#library">Library</a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Toggle menu" aria-expanded="false">
+          ☰
+        </button>
+
+        <div class="nav-actions" id="navActions">
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light mode">
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+            <span class="toggle-icon" id="themeIcon">☀</span>
+            <span class="toggle-label">Light Mode</span>
+          </button>
+
+          <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#schedule">Schedule</a>
+            <a href="#diet">Diet</a>
+            <a href="#workouts">Workouts</a>
+            <a href="#abs">Abs</a>
+            <a href="#reset">Reset</a>
+            <a href="#library">Library</a>
+          </div>
         </div>
       </nav>
 
-      <div class="hero-content" id="home">
+      <div class="hero-content">
         <div class="main-brand">
           <img
             class="main-logo"
@@ -33,11 +51,48 @@
             <h1>V-TAPER SYSTEM</h1>
             <p class="subtitle">Age: 37 | Weight: 80kg | Height: 1.79m | Current BF%: ~15% | Goal: 10% in 12–16 Weeks</p>
           </div>
+
+          <div class="hero-stats">
+            <div class="stat-card"><span>Calories</span><strong>1,500 kcal</strong></div>
+            <div class="stat-card"><span>Protein</span><strong>180g</strong></div>
+            <div class="stat-card"><span>Timeline</span><strong>12–16 Weeks</strong></div>
+          </div>
+
+          <div class="hero-ctas">
+            <a class="cta-primary" href="#workouts">Start Workout</a>
+            <a class="cta-secondary" href="#schedule">View Plan</a>
+          </div>
+        </div>
+
+        <div class="quick-links">
+          <a href="#monday">Monday</a>
+          <a href="#tuesday">Tuesday</a>
+          <a href="#wednesday">Wednesday</a>
+          <a href="#thursday">Thursday</a>
+          <a href="#friday">Friday</a>
         </div>
       </div>
     </header>
 
     <main>
+      <section class="section progress-section" id="progress">
+        <h2>Progress Tracker</h2>
+        <div class="card">
+          <div class="progress-item">
+            <div class="progress-head"><span>Body Fat Goal</span><strong>15% → 10%</strong></div>
+            <div class="progress-bar"><span style="width: 50%"></span></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-head"><span>Weekly Workouts</span><strong>5 / 5</strong></div>
+            <div class="progress-bar"><span style="width: 100%"></span></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-head"><span>Daily Walks</span><strong>7 / 7</strong></div>
+            <div class="progress-bar"><span style="width: 100%"></span></div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="truth">
         <h2>Progress Targets</h2>
         <div class="table-card">
@@ -51,7 +106,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td>Body Fat %</td><td>15%</td><td>10%</td><td>12–16 weeks</td></tr>
+              <tr><td>Body Fat %</td><td><span class="badge">15%</span></td><td><span class="badge accent">10%</span></td><td>12–16 weeks</td></tr>
               <tr><td>Weight</td><td>80kg</td><td>70–72kg</td><td>12–16 weeks</td></tr>
               <tr><td>Waist</td><td>Measure weekly</td><td>Reduce by 8–10cm</td><td>12–16 weeks</td></tr>
               <tr><td>V-Taper Ratio</td><td>Measure weekly</td><td>1.6</td><td>12–16 weeks</td></tr>
@@ -62,6 +117,10 @@
 
       <section class="section" id="schedule">
         <h2>Weekly Schedule</h2>
+        <div class="card summary-card">
+          <p><strong>Estimated Weekly Workout Calories Burned:</strong> 1,670–2,220 kcal</p>
+          <p><strong>Breakdown:</strong> Monday 350–450 | Tuesday 320–420 | Wednesday 300–400 | Thursday 400–550 | Friday 300–400 kcal</p>
+        </div>
         <div class="table-card">
           <table>
             <thead>
@@ -73,11 +132,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td>Monday</td><td>Upper A (Heavy Width)</td><td>Lats + Side Delts + Rear Delts</td><td>20 min post-workout incline walk</td></tr>
-              <tr><td>Tuesday</td><td>Upper B (Heavy Thickness)</td><td>Mid-Back + Biceps + Volume Laterals</td><td>20 min post-workout incline walk</td></tr>
-              <tr><td>Wednesday</td><td>Upper C (Pump & Stretch)</td><td>High-rep lat pump + Shoulder health</td><td>20 min post-workout incline walk</td></tr>
-              <tr><td>Thursday</td><td>Legs + Core (1x weekly)</td><td>Leg Press, Hamstrings, Glutes + Core</td><td>20 min post-workout incline walk</td></tr>
-              <tr><td>Friday</td><td>Arms & Shoulder Finishing</td><td>Biceps, Triceps, Side Delts (dropsets)</td><td>20 min post-workout incline walk</td></tr>
+              <tr><td>Monday</td><td>Upper A (Heavy Width)</td><td>Lats + Side Delts + Rear Delts</td><td>20 min incline walk</td></tr>
+              <tr><td>Tuesday</td><td>Upper B (Heavy Thickness)</td><td>Mid-Back + Biceps + Volume Laterals</td><td>20 min incline walk</td></tr>
+              <tr><td>Wednesday</td><td>Upper C (Pump & Stretch)</td><td>High-rep lat pump + Shoulder health</td><td>20 min incline walk</td></tr>
+              <tr><td>Thursday</td><td>Legs + Core (1x weekly)</td><td>Leg Press, Hamstrings, Glutes + Core</td><td>20 min incline walk</td></tr>
+              <tr><td>Friday</td><td>Arms & Shoulder Finishing</td><td>Biceps, Triceps, Side Delts (dropsets)</td><td>20 min incline walk</td></tr>
               <tr><td>Saturday</td><td>Active Recovery</td><td>Morning Abs + 45–60 min LISS walk</td><td>45–60 min walk</td></tr>
               <tr><td>Sunday</td><td>COMPLETE REST</td><td>Nerve glides only if stiff</td><td>Rest</td></tr>
             </tbody>
@@ -112,10 +171,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td>Calories</td><td>1,900–2,000 kcal</td></tr>
-              <tr><td>Protein</td><td>180–190g</td></tr>
-              <tr><td>Carbs</td><td>120–140g</td></tr>
-              <tr><td>Fats</td><td>45–50g</td></tr>
+              <tr><td>Calories</td><td>~1,500 kcal</td></tr>
+              <tr><td>Protein</td><td>~180g</td></tr>
+              <tr><td>Carbs</td><td>Adjust to fit calories</td></tr>
+              <tr><td>Fats</td><td>Moderate, based on chicken and whey</td></tr>
               <tr><td>Water</td><td>3–4L daily</td></tr>
             </tbody>
           </table>
@@ -123,28 +182,24 @@
       </section>
 
       <section class="section" id="meal-plan">
-        <h2>Daily Fat Loss Meal Plan (1,905 kcal)</h2>
+        <h2>Daily Fat Loss Meal Plan (~1,500 kcal)</h2>
         <div class="table-card">
           <table>
             <thead>
               <tr>
-                <th>Time</th>
-                <th>Meal</th>
+                <th>Meal Time</th>
                 <th>Food</th>
+                <th>Amount</th>
                 <th>Calories</th>
                 <th>Protein</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>12:00pm</td><td>Protein Shake #1</td><td>2 scoops whey + water</td><td>260</td><td>48g</td></tr>
-              <tr><td>12:00pm</td><td>Fruit</td><td>1 apple</td><td>95</td><td>0.5g</td></tr>
-              <tr><td>5:00pm</td><td>Early Dinner</td><td>150g roast chicken (skin on) + 2 whole eggs</td><td>440</td><td>42g</td></tr>
-              <tr><td>5:00pm</td><td>Side Veg + Carbs</td><td>2 cups steamed veg + 1 tsp olive oil + 100g sweet potato</td><td>190</td><td>4g</td></tr>
-              <tr><td>7:00pm</td><td>Main Dinner</td><td>150g roast chicken (skin on)</td><td>330</td><td>32g</td></tr>
-              <tr><td>7:00pm</td><td>Side Veg + Carbs</td><td>2 cups steamed veg + 1 tsp olive oil + 1 small banana</td><td>190</td><td>3g</td></tr>
-              <tr><td>Snack</td><td>Eggs</td><td>2 whole eggs (boiled)</td><td>140</td><td>12g</td></tr>
-              <tr><td>9:00pm</td><td>Protein Shake #2</td><td>2 scoops whey + water</td><td>260</td><td>48g</td></tr>
-              <tr><td><strong>TOTAL</strong></td><td></td><td></td><td><strong>~1,905</strong></td><td><strong>~189.5g</strong></td></tr>
+              <tr><td>11:00 AM</td><td>Protein Shake</td><td>2 scoops whey + water</td><td>300</td><td>48g</td></tr>
+              <tr><td>16:30 PM</td><td>Lunch</td><td>Whole roasted chicken (meat + skin) ~400g</td><td>800</td><td>83g</td></tr>
+              <tr><td>18:00 PM</td><td>Bar Snack</td><td>Protein bar — 1 bar</td><td>250</td><td>25g</td></tr>
+              <tr><td>21:00 PM</td><td>Protein Shake</td><td>1 scoop whey + water</td><td>150</td><td>24g</td></tr>
+              <tr><td><strong>TOTAL</strong></td><td></td><td></td><td><strong>1,500</strong></td><td><strong>180g</strong></td></tr>
             </tbody>
           </table>
         </div>
@@ -156,6 +211,7 @@
           <article class="card workout-card" id="monday">
             <h3>Monday: Upper A — Heavy Width</h3>
             <p><strong>Focus:</strong> Lats (Width) + Side Delts + Rear Delts</p>
+            <p><strong>Estimated Calories Burned:</strong> 350–450 kcal</p>
             <h4>Warm-Up</h4>
             <ul>
               <li>Cat-Cow stretches – 10 slow reps</li>
@@ -187,6 +243,7 @@
           <article class="card workout-card" id="tuesday">
             <h3>Tuesday: Upper B — Heavy Thickness</h3>
             <p><strong>Focus:</strong> Mid-Back Thickness + Biceps + Volume Laterals</p>
+            <p><strong>Estimated Calories Burned:</strong> 320–420 kcal</p>
             <h4>Warm-Up</h4>
             <ul>
               <li>Cat-Cow stretches – 10 slow reps</li>
@@ -218,6 +275,7 @@
           <article class="card workout-card" id="wednesday">
             <h3>Wednesday: Upper C — Pump & Stretch</h3>
             <p><strong>Focus:</strong> High-rep Lat Pump + Shoulder Health</p>
+            <p><strong>Estimated Calories Burned:</strong> 300–400 kcal</p>
             <h4>Warm-Up</h4>
             <ul>
               <li>Cat-Cow stretches – 10 slow reps</li>
@@ -249,6 +307,7 @@
           <article class="card workout-card" id="thursday">
             <h3>Thursday: Legs + Core</h3>
             <p><strong>Focus:</strong> Leg Health (1x weekly) + Core Stability</p>
+            <p><strong>Estimated Calories Burned:</strong> 400–550 kcal</p>
             <h4>Warm-Up</h4>
             <ul>
               <li>Cat-Cow stretches – 10 slow reps</li>
@@ -282,6 +341,7 @@
           <article class="card workout-card" id="friday">
             <h3>Friday: Arms & Shoulder Finishing</h3>
             <p><strong>Focus:</strong> Side Delts (Dropsets) + Biceps + Triceps</p>
+            <p><strong>Estimated Calories Burned:</strong> 300–400 kcal</p>
             <h4>Warm-Up</h4>
             <ul>
               <li>Cat-Cow stretches – 10 slow reps</li>
@@ -347,37 +407,39 @@
       <section class="section" id="library">
         <h2>Complete Exercise Instruction Library</h2>
         <div class="library-grid">
-          <div class="card" id="pull-ups"><h3>Pull-Ups</h3><p>Grip wider than shoulders. Hang fully, pull elbows down and back, no swinging.</p></div>
-          <div class="card" id="machine-row"><h3>Chest-Supported Machine Row</h3><p>Chest flat against pad. Pull handles to lower chest.</p></div>
-          <div class="card" id="lateral-raises"><h3>Lateral Raises</h3><p>Slight forward lean. Raise to shoulder height. No swinging.</p></div>
-          <div class="card" id="face-pulls"><h3>Face Pulls</h3><p>Pull rope toward face and apart at the end.</p></div>
-          <div class="card" id="pullovers"><h3>Dumbbell Pullovers</h3><p>Shoulders supported, hips low, deep lat stretch.</p></div>
-          <div class="card" id="straight-arm-pulldowns"><h3>Straight-Arm Pulldowns</h3><p>Arms straight, torso still, squeeze lats at bottom.</p></div>
-          <div class="card" id="seated-cable-rows"><h3>Seated Cable Rows</h3><p>Pull to lower chest and squeeze shoulder blades together.</p></div>
-          <div class="card" id="close-grip-pulldowns"><h3>Close-Grip Pulldowns</h3><p>Pull bar to upper chest with elbows tucked.</p></div>
-          <div class="card" id="rear-delt-flyes"><h3>Rear Delt Flyes</h3><p>Chest against pad, open arms wide, squeeze rear delts.</p></div>
-          <div class="card" id="incline-press"><h3>Incline Dumbbell Press</h3><p>Bench at 30–45°, feet flat, no arch.</p></div>
-          <div class="card" id="hammer-curls"><h3>Hammer Curls</h3><p>Neutral grip, elbows at sides, controlled negative.</p></div>
-          <div class="card" id="shoulder-press"><h3>Seated Dumbbell Shoulder Press</h3><p>Back supported, press straight up with control.</p></div>
-          <div class="card" id="crossovers"><h3>Cable Cross-Overs</h3><p>Pull hands down and across the body, no arch.</p></div>
-          <div class="card" id="leg-press"><h3>Leg Press</h3><p>Feet high and wide, back fully braced against pad.</p></div>
-          <div class="card" id="lying-leg-curls"><h3>Lying Leg Curls</h3><p>Lie face down and curl toward glutes with control.</p></div>
-          <div class="card" id="leg-extensions"><h3>Leg Extensions</h3><p>Seated on machine, extend legs and squeeze quads.</p></div>
-          <div class="card" id="glute-bridges"><h3>Glute Bridges</h3><p>Lie on back, lift hips, squeeze glutes at top.</p></div>
-          <div class="card" id="seated-calf-raises"><h3>Seated Calf Raises</h3><p>Lower heels for a full stretch and press up high.</p></div>
-          <div class="card" id="dead-bug"><h3>Dead Bug</h3><p>Lower back flat, extend opposite arm and leg slowly.</p></div>
-          <div class="card" id="plank"><h3>Plank</h3><p>Forearms down, body straight, glutes and core tight.</p></div>
-          <div class="card" id="side-plank"><h3>Side Plank</h3><p>Hips stacked, neutral spine, no sagging.</p></div>
-          <div class="card" id="bird-dog"><h3>Bird-Dog</h3><p>Extend opposite arm and leg, hold for 3 seconds.</p></div>
-          <div class="card" id="hollow-body-hold"><h3>Hollow Body Hold</h3><p>Lower back pinned to floor, hold only what you control.</p></div>
-          <div class="card" id="arnold-press"><h3>Arnold Press</h3><p>Rotate palms outward at the top, controlled tempo.</p></div>
-          <div class="card" id="skull-crushers"><h3>EZ-Bar Skull Crushers</h3><p>Lower to forehead with elbows pointed up.</p></div>
-          <div class="card" id="preacher-curls"><h3>Preacher Curls</h3><p>Elbows supported on the pad, strict curl.</p></div>
-          <div class="card" id="pushdowns"><h3>Tricep Pushdowns</h3><p>Elbows at sides, push rope down and spread ends.</p></div>
-          <div class="card" id="dumbbell-curls"><h3>Dumbbell Curls</h3><p>No swinging, control the negative for 2–3 seconds.</p></div>
-          <div class="card" id="cable-lateral-raises"><h3>Cable Lateral Raises</h3><p>Use light weight, braced core, raise to shoulder height.</p></div>
+          <details class="card exercise-accordion" id="pull-ups"><summary>Pull-Ups</summary><p>Grip wider than shoulders. Hang fully, pull elbows down and back, no swinging. <a href="https://www.youtube.com/results?search_query=pull+ups+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="machine-row"><summary>Chest-Supported Machine Row</summary><p>Chest flat against pad. Pull handles to lower chest. <a href="https://www.youtube.com/results?search_query=chest+supported+machine+row+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="lateral-raises"><summary>Lateral Raises</summary><p>Slight forward lean. Raise to shoulder height. No swinging. <a href="https://www.youtube.com/results?search_query=lateral+raise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="face-pulls"><summary>Face Pulls</summary><p>Pull rope toward face and apart at the end. <a href="https://www.youtube.com/results?search_query=face+pull+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="pullovers"><summary>Dumbbell Pullovers</summary><p>Shoulders supported, hips low, deep lat stretch. <a href="https://www.youtube.com/results?search_query=dumbbell+pullover+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="straight-arm-pulldowns"><summary>Straight-Arm Pulldowns</summary><p>Arms straight, torso still, squeeze lats at bottom. <a href="https://www.youtube.com/results?search_query=straight+arm+pulldown+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="seated-cable-rows"><summary>Seated Cable Rows</summary><p>Pull to lower chest and squeeze shoulder blades together. <a href="https://www.youtube.com/results?search_query=seated+cable+row+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="close-grip-pulldowns"><summary>Close-Grip Pulldowns</summary><p>Pull bar to upper chest with elbows tucked. <a href="https://www.youtube.com/results?search_query=close+grip+lat+pulldown+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="rear-delt-flyes"><summary>Rear Delt Flyes</summary><p>Chest against pad, open arms wide, squeeze rear delts. <a href="https://www.youtube.com/results?search_query=rear+delt+fly+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="incline-press"><summary>Incline Dumbbell Press</summary><p>Bench at 30–45°, feet flat, no arch. <a href="https://www.youtube.com/results?search_query=incline+dumbbell+press+proper+form" target="_blank" rel=\"noopener\">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="hammer-curls"><summary>Hammer Curls</summary><p>Neutral grip, elbows at sides, controlled negative. <a href="https://www.youtube.com/results?search_query=hammer+curls+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="shoulder-press"><summary>Seated Dumbbell Shoulder Press</summary><p>Back supported, press straight up with control. <a href="https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="crossovers"><summary>Cable Cross-Overs</summary><p>Pull hands down and across the body, no arch. <a href="https://www.youtube.com/results?search_query=cable+crossover+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="leg-press"><summary>Leg Press</summary><p>Feet high and wide, back fully braced against pad. <a href="https://www.youtube.com/results?search_query=leg+press+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="lying-leg-curls"><summary>Lying Leg Curls</summary><p>Lie face down and curl toward glutes with control. <a href="https://www.youtube.com/results?search_query=lying+leg+curl+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="leg-extensions"><summary>Leg Extensions</summary><p>Seated on machine, extend legs and squeeze quads. <a href="https://www.youtube.com/results?search_query=leg+extension+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="glute-bridges"><summary>Glute Bridges</summary><p>Lie on back, lift hips, squeeze glutes at top. <a href="https://www.youtube.com/results?search_query=glute+bridge+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="seated-calf-raises"><summary>Seated Calf Raises</summary><p>Lower heels for a full stretch and press up high. <a href="https://www.youtube.com/results?search_query=seated+calf+raise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="dead-bug"><summary>Dead Bug</summary><p>Lower back flat, extend opposite arm and leg slowly. <a href="https://www.youtube.com/results?search_query=dead+bug+exercise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="plank"><summary>Plank</summary><p>Forearms down, body straight, glutes and core tight. <a href="https://www.youtube.com/results?search_query=plank+exercise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="side-plank"><summary>Side Plank</summary><p>Hips stacked, neutral spine, no sagging. <a href="https://www.youtube.com/results?search_query=side+plank+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="bird-dog"><summary>Bird-Dog</summary><p>Extend opposite arm and leg, hold for 3 seconds. <a href="https://www.youtube.com/results?search_query=bird+dog+exercise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="hollow-body-hold"><summary>Hollow Body Hold</summary><p>Lower back pinned to floor, hold only what you control. <a href="https://www.youtube.com/results?search_query=hollow+body+hold+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="arnold-press"><summary>Arnold Press</summary><p>Rotate palms outward at the top, controlled tempo. <a href="https://www.youtube.com/results?search_query=arnold+press+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="skull-crushers"><summary>EZ-Bar Skull Crushers</summary><p>Lower to forehead with elbows pointed up. <a href="https://www.youtube.com/results?search_query=ez+bar+skull+crusher+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="preacher-curls"><summary>Preacher Curls</summary><p>Elbows supported on the pad, strict curl. <a href="https://www.youtube.com/results?search_query=preacher+curl+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="pushdowns"><summary>Tricep Pushdowns</summary><p>Elbows at sides, push rope down and spread ends. <a href="https://www.youtube.com/results?search_query=tricep+pushdown+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="dumbbell-curls"><summary>Dumbbell Curls</summary><p>No swinging, control the negative for 2–3 seconds. <a href="https://www.youtube.com/results?search_query=dumbbell+curl+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
+          <details class="card exercise-accordion" id="cable-lateral-raises"><summary>Cable Lateral Raises</summary><p>Use light weight, braced core, raise to shoulder height. <a href="https://www.youtube.com/results?search_query=cable+lateral+raise+proper+form" target="_blank" rel="noopener">Watch video</a></p></details>
         </div>
       </section>
     </main>
+
+    <script src="script.js"></script>
   </body>
 </html>
