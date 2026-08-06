@@ -5,6 +5,7 @@ const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const navActions = document.getElementById("navActions");
 const navLinks = document.querySelectorAll(".nav-links a");
 const sections = document.querySelectorAll("section[id], header.hero[id]");
+const backToTop = document.getElementById("backToTop");
 
 const root = document.documentElement;
 const savedTheme = localStorage.getItem("theme") || "dark";
@@ -17,7 +18,7 @@ function setTheme(theme) {
   } else {
     root.setAttribute("data-theme", "dark");
     themeIcon.textContent = "☾";
-    themeLabel.textContent = "Light Mode";
+    themeLabel.textContent = "Dark Mode";
   }
   localStorage.setItem("theme", theme);
 }
@@ -32,6 +33,14 @@ themeToggle.addEventListener("click", () => {
 mobileMenuBtn.addEventListener("click", () => {
   const open = navActions.classList.toggle("open");
   mobileMenuBtn.setAttribute("aria-expanded", String(open));
+});
+
+window.addEventListener("scroll", () => {
+  backToTop.classList.toggle("show", window.scrollY > 400);
+});
+
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 const observer = new IntersectionObserver(
