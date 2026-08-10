@@ -230,7 +230,13 @@ img { max-width: 100%; display: block; }
 .cta-secondary { background: transparent; font-weight: 700; }
 
 .section { padding: 72px 24px; }
-.section h2 { margin: 0 0 20px; font-size: 1.8rem; letter-spacing: -0.03em; color: var(--text); }
+.section h2 {
+  margin: 0 0 20px;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(163, 230, 53, 0.18);
+}
 
 .card, .table-card {
   background: linear-gradient(180deg, var(--surface), rgba(255,255,255,0.02));
@@ -248,7 +254,7 @@ img { max-width: 100%; display: block; }
 .table-card { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 720px; }
 th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { background: rgba(163, 230, 53, 0.08); color: var(--text); font-weight: 800; }
+th { background: rgba(163, 230, 53, 0.08); color: var(--accent); font-weight: 800; }
 tbody tr:nth-child(even) { background: rgba(163, 230, 53, 0.03); }
 tbody tr:hover { background: rgba(163, 230, 53, 0.08); }
 
@@ -319,6 +325,7 @@ tbody tr:hover { background: rgba(163, 230, 53, 0.08); }
   cursor: pointer;
   padding: 20px 22px;
   font-weight: 800;
+  color: var(--accent);
 }
 .exercise-accordion summary::-webkit-details-marker { display: none; }
 .exercise-accordion p { padding: 0 22px 20px; margin: 0; color: var(--muted); }
