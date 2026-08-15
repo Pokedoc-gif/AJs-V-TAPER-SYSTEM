@@ -6,20 +6,16 @@ const navActions = document.getElementById("navActions");
 const navLinks = document.querySelectorAll(".nav-links a");
 const sections = document.querySelectorAll("section[id], header.hero[id]");
 const backToTop = document.getElementById("backToTop");
-
 const root = document.documentElement;
+
 const savedTheme = localStorage.getItem("theme") || "dark";
 
 function setTheme(theme) {
-  if (theme === "light") {
-    root.setAttribute("data-theme", "light");
-    themeIcon.textContent = "☀";
-    themeLabel.textContent = "Light Mode";
-  } else {
-    root.setAttribute("data-theme", "dark");
-    themeIcon.textContent = "☾";
-    themeLabel.textContent = "Dark Mode";
-  }
+  const isLight = theme === "light";
+
+  root.setAttribute("data-theme", isLight ? "light" : "dark");
+  themeIcon.textContent = isLight ? "☀" : "☾";
+  themeLabel.textContent = isLight ? "Light Mode" : "Dark Mode";
 
   localStorage.setItem("theme", theme);
 }
@@ -44,116 +40,85 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-const sundayWorkout = `
-  <article class="card workout-card" id="sunday">
-    <h3>Sunday: Complete Arms Day</h3>
-    <p><strong>Focus:</strong> Biceps, Triceps, Brachialis</p>
-    <p><strong>Workout Calories:</strong> 420</p>
-    <p><strong>Post Workout Abs Calories:</strong> 80</p>
-    <p><strong>Total Calories Burned:</strong> 500</p>
-    <p><strong>Cardio:</strong> 20 min incline walk</p>
-
-    <h4>Superset Workout</h4>
-    <ul>
-      <li><strong>Superset 1:</strong> Seated Dumbbell Curls — 4 x 8–10 — Biceps (Mass)</li>
-      <li><strong>Superset 1:</strong> EZ-Bar Skull Crushers — 4 x 10–12 — Triceps (Mass)</li>
-      <li><strong>Superset 2:</strong> Incline Dumbbell Curls — 4 x 12–15 — Biceps (Long Head)</li>
-      <li><strong>Superset 2:</strong> Overhead Tricep Extension — 4 x 12–15 — Triceps (Long Head)</li>
-      <li><strong>Superset 3:</strong> Preacher Curls — 4 x 10–12 — Biceps (Peak)</li>
-      <li><strong>Superset 3:</strong> Tricep Pushdowns (Rope) — 4 x 12–15 — Triceps (Horseshoe)</li>
-      <li><strong>Superset 4:</strong> Hammer Curls — 4 x 12–15 — Brachialis</li>
-      <li><strong>Superset 4:</strong> Close-Grip Bench Press (DB) — 4 x 10–12 — Triceps (Mass)</li>
-      <li><strong>Finisher:</strong> Cable Curls — 3 x 20–25 — Blood flow</li>
-      <li><strong>Finisher:</strong> Cable Tricep Kickbacks — 3 x 20–25 — Blood flow</li>
-    </ul>
-
-    <p class="warning">
-      Complete each superset by performing both exercises back-to-back, then rest.
-      Use controlled reps and stop if you experience pain or nerve symptoms.
-    </p>
-  </article>
-`;
-
-function addSundayWorkout() {
-  const workoutGrid = document.querySelector(".workout-grid");
-  const saturdayWorkout = document.getElementById("saturday");
-
-  if (workoutGrid && saturdayWorkout && !document.getElementById("sunday")) {
-    saturdayWorkout.insertAdjacentHTML("afterend", sundayWorkout);
-  }
+function numberFromCell(cell) {
+  return Number(cell?.textContent.replace(/[^\d.-]/g, "")) || 0;
 }
 
 function recalculatePlanValues() {
-  const weeklyWorkoutCalories = 3180;
-  const weeklyAbsCalories = 560;
-  const weeklyTotalCalories = 3740;
+  const scheduleRows = [...document.querySelectorAll("#schedule tbody tr")];
 
-  const progressValues = document.querySelectorAll(".progress-head strong");
-  progressValues.forEach((value) => {
-    if (value.textContent.includes("/ 6")) {
-      value.textContent = "7 / 7";
+  let weeklyWorkoutCalories = 0;
+  let weeklyTotalCalories = 0;
+  let trainingDays = 0;
+
+  scheduleRows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+
+    if (cells.length < 6) return;
+
+    const workoutCalories = numberFromCell(cells[3]);
+    const absCalories = numberFromCell(cells[4]);
+    const totalCalories = workoutCalories + absCalories;
+
+    cells[5].textContent = String(totalCalories);
+
+    weeklyWorkoutCalories += workoutCalories;
+    weeklyTotalCalories += totalCalories;
+
+    if (workoutCalories > 0) {
+      trainingDays += 1;
     }
   });
 
-  document.querySelectorAll(".progress-bar span").forEach((bar) => {
-    const parentText = bar.closest(".progress-item")?.textContent || "";
-
-    if (parentText.includes("Weekly Workouts")) {
-      bar.style.width = "100%";
-    }
-  });
-
+  const weeklyAbsCalories = weeklyTotalCalories - weeklyWorkoutCalories;
   const scheduleSummary = document.querySelector("#schedule .summary-card");
+
   if (scheduleSummary) {
     scheduleSummary.innerHTML = `
-      <p><strong>Estimated Weekly Workout Calories Burned:</strong> ${weeklyWorkoutCalories} kcal from 7 training days</p>
-      <p><strong>Estimated Weekly Total Including Post-Workout Abs:</strong> ${weeklyTotalCalories} kcal</p>
+      <p><strong>Estimated Weekly Workout Calories Burned:</strong> ${weeklyWorkoutCalories} kcal from ${trainingDays} training days</p>
+      <p><strong>Estimated Weekly Post-Workout Abs Calories:</strong> ${weeklyAbsCalories} kcal</p>
+      <p><strong>Estimated Weekly Total Burned:</strong> ${weeklyTotalCalories} kcal</p>
       <p><strong>Breakdown:</strong> Monday Upper A | Tuesday Upper B | Wednesday Upper C | Thursday Legs + Core | Friday Arms + Lower Chest | Saturday Dedicated Chest | Sunday Complete Arms Day</p>
     `;
   }
 
-  const scheduleRows = document.querySelectorAll("#schedule tbody tr");
-  const sundayRow = scheduleRows[scheduleRows.length - 1];
+  const progressItems = document.querySelectorAll(".progress-item");
 
-  if (sundayRow) {
-    sundayRow.innerHTML = `
-      <td>Sunday</td>
-      <td>Complete Arms Day</td>
-      <td>Biceps, Triceps, Brachialis</td>
-      <td>420</td>
-      <td>80</td>
-      <td>500</td>
-      <td>20 min incline walk</td>
-    `;
-  }
+  progressItems.forEach((item) => {
+    const label = item.querySelector(".progress-head span")?.textContent.trim();
+    const value = item.querySelector(".progress-head strong");
+    const bar = item.querySelector(".progress-bar span");
 
-  const nonNegotiables = document.querySelector("#non-negotiables li");
-  if (nonNegotiables && nonNegotiables.textContent.includes("6")) {
-    nonNegotiables.textContent = "7 training days per week";
-  }
+    if (label === "Weekly Workouts" && value && bar) {
+      value.textContent = `${trainingDays} / ${trainingDays}`;
+      bar.style.width = trainingDays > 0 ? "100%" : "0%";
+    }
+  });
 
-  const quickLinks = document.querySelector(".quick-links");
-  if (quickLinks && !quickLinks.querySelector('a[href="#sunday"]')) {
-    quickLinks.insertAdjacentHTML("beforeend", '<a href="#sunday">Sunday</a>');
+  const trainingFrequency = document.querySelector(
+    "#non-negotiables #training-frequency"
+  );
+
+  if (trainingFrequency) {
+    trainingFrequency.textContent = `${trainingDays} training days per week`;
   }
 }
 
-addSundayWorkout();
 recalculatePlanValues();
 
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        navLinks.forEach((link) => link.classList.remove("active"));
+      if (!entry.isIntersecting) return;
 
-        const active = document.querySelector(
-          `.nav-links a[href="#${entry.target.id}"]`
-        );
+      navLinks.forEach((link) => link.classList.remove("active"));
 
-        if (active) {
-          active.classList.add("active");
-        }
+      const activeLink = document.querySelector(
+        `.nav-links a[href="#${entry.target.id}"]`
+      );
+
+      if (activeLink) {
+        activeLink.classList.add("active");
       }
     });
   },
@@ -162,7 +127,6 @@ const observer = new IntersectionObserver(
 
 sections.forEach((section) => observer.observe(section));
 
-const sundaySection = document.getElementById("sunday");
-if (sundaySection) {
-  observer.observe(sundaySection);
-}
+document.querySelectorAll(".workout-card").forEach((workout) => {
+  observer.observe(workout);
+});
