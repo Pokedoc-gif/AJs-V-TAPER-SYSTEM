@@ -13,7 +13,7 @@ const inclineWalkMET = 5;
 const lissWalkMET = 3.5;
 const absCaloriesPerWorkout = 80;
 
-const exerciseLinks = {
+const libraryIds = {
   "Weighted Wide-grip Pull-ups": "pull-ups",
   "Incline Dumbbell Press": "incline-press",
   "Chest-supported Machine Row": "machine-row",
@@ -42,7 +42,7 @@ const exerciseLinks = {
   "Leg Extensions": "leg-extensions",
   "Glute Bridges (Bodyweight)": "glute-bridges",
   "Seated Calf Raises": "seated-calf-raises",
-  "Plank": "plank",
+  Plank: "plank",
   "Side Plank": "side-plank",
   "Seated Arnold Press": "arnold-press",
   "EZ-Bar Skull Crushers": "skull-crushers",
@@ -50,7 +50,7 @@ const exerciseLinks = {
   "Tricep Pushdowns (Rope)": "pushdowns",
   "Dumbbell Curls (Strict)": "dumbbell-curls",
   "High-to-Low Cable Cross-overs": "high-to-low-crossovers",
-  "Dips": "dips",
+  Dips: "dips",
   "Dips (Bodyweight or Weighted)": "dips",
   "Decline Dumbbell Press": "decline-press",
   "Push-ups": "push-ups",
@@ -70,17 +70,42 @@ function escapeHtml(value) {
   }[character]));
 }
 
+function getSavedTheme() {
+  try {
+    return localStorage.getItem("theme") || "dark";
+  } catch {
+    return "dark";
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem("theme", theme);
+  } catch {
+    // Theme still applies for the current page session.
+  }
+}
+
 function setTheme(theme) {
   const isLight = theme === "light";
-  root.setAttribute("data-theme", isLight ? "light" : "dark");
+  const activeTheme = isLight ? "light" : "dark";
+
+  root.setAttribute("data-theme", activeTheme);
 
   if (themeIcon) themeIcon.textContent = isLight ? "☀" : "☾";
   if (themeLabel) themeLabel.textContent = isLight ? "Light Mode" : "Dark Mode";
 
-  localStorage.setItem("theme", isLight ? "light" : "dark");
+  if (themeToggle) {
+    themeToggle.setAttribute(
+      "aria-label",
+      isLight ? "Switch to dark mode" : "Switch to light mode"
+    );
+  }
+
+  saveTheme(activeTheme);
 }
 
-setTheme(localStorage.getItem("theme") || "dark");
+setTheme(getSavedTheme());
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
@@ -96,6 +121,15 @@ if (mobileMenuBtn && navActions) {
   });
 }
 
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    if (!navActions || !mobileMenuBtn) return;
+
+    navActions.classList.remove("open");
+    mobileMenuBtn.setAttribute("aria-expanded", "false");
+  });
+});
+
 if (backToTop) {
   window.addEventListener("scroll", () => {
     backToTop.classList.toggle("show", window.scrollY > 400);
@@ -104,6 +138,23 @@ if (backToTop) {
   backToTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
+}
+
+function exercise(name, sets, reps, rest, notes) {
+  return {
+    name,
+    sets,
+    reps,
+    rest,
+    notes,
+    libraryId: libraryIds[name] || null
+  };
+}
+
+function workoutVideoUrl(title) {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(
+    `${title.replace(/^[^:]+:\s*/, "")} workout how to`
+  )}`;
 }
 
 const workouts = [
@@ -115,16 +166,16 @@ const workouts = [
     cardioMinutes: 20,
     cardioMET: inclineWalkMET,
     exercises: [
-      "Weighted Wide-grip Pull-ups — 3 x 6–8 — 60s — Lats = V-taper width. Hang fully. Squeeze at top.",
-      "Incline Dumbbell Press — 3 x 10–12 — 60s — Upper chest. 30° incline. No arch.",
-      "Chest-supported Machine Row — 3 x 10–12 — 45s — Mid-back thickness. Last set: dropset.",
-      "Heavy Lateral Raises (DB) — 4 x 8–10 — 45s — Side delts. Last set: dropset.",
-      "Face Pulls — 3 x 15–20 — 45s — Rear delts + rotator cuff health.",
-      "Dumbbell Pullovers — 3 x 12–15 — 45s — Lats + chest stretch.",
-      "Seated Dumbbell Curls — 3 x 10–12 — 45s — Biceps. Seated, back supported. No swinging.",
-      "Tricep Pushdowns (Rope) — 3 x 12–15 — 45s — Triceps. Elbows locked at sides. Squeeze at bottom.",
-      "Finisher: Straight-arm Pulldowns — 2 x 15–20 — 30s — Lat burnout. Dropset on final set.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher. Lean forward slightly for chest + triceps."
+      exercise("Weighted Wide-grip Pull-ups", 3, "6–8", 60, "Lats = V-taper width. Hang fully. Squeeze at top."),
+      exercise("Incline Dumbbell Press", 3, "10–12", 60, "Upper chest. 30° incline. No arch."),
+      exercise("Chest-supported Machine Row", 3, "10–12", 45, "Mid-back thickness. Last set: dropset."),
+      exercise("Heavy Lateral Raises (DB)", 4, "8–10", 45, "Side delts. Last set: dropset."),
+      exercise("Face Pulls", 3, "15–20", 45, "Rear delts + rotator cuff health."),
+      exercise("Dumbbell Pullovers", 3, "12–15", 45, "Lats + chest stretch."),
+      exercise("Seated Dumbbell Curls", 3, "10–12", 45, "Biceps. Seated, back supported. No swinging."),
+      exercise("Tricep Pushdowns (Rope)", 3, "12–15", 45, "Triceps. Elbows locked at sides. Squeeze at bottom."),
+      exercise("Straight-arm Pulldowns", 2, "15–20", 30, "Lat burnout. Dropset on final set."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher. Lean forward slightly for chest + triceps.")
     ]
   },
   {
@@ -135,16 +186,16 @@ const workouts = [
     cardioMinutes: 20,
     cardioMET: inclineWalkMET,
     exercises: [
-      "Seated Cable Rows (V-grip) — 3 x 8–10 — 60s — Mid-back. Last set: dropset.",
-      "Close-grip Pulldowns — 3 x 10–12 — 45s — Lats + biceps. Squeeze hard.",
-      "Flat Dumbbell Bench Press — 3 x 10–12 — 60s — Middle chest. No arch.",
-      "Lateral Raises (Volume) — 4 x 15–20 — 45s — Side delt pump.",
-      "Rear Delt Machine Flyes — 3 x 15–20 — 45s — Rear delts.",
-      "Incline Dumbbell Press (light) — 3 x 12–15 — 45s — Upper chest burnout. Last set: dropset.",
-      "Incline Dumbbell Curls — 3 x 12–15 — 45s — Biceps. Incline bench (45°). Stretch the long head.",
-      "Overhead Tricep Extension — 3 x 12–15 — 45s — Triceps. Seated with back support. One DB with both hands.",
-      "Hammer Curls — 3 x 10–12 — 45s — Biceps. Last set: dropset.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher."
+      exercise("Seated Cable Rows (V-grip)", 3, "8–10", 60, "Mid-back. Last set: dropset."),
+      exercise("Close-grip Pulldowns", 3, "10–12", 45, "Lats + biceps. Squeeze hard."),
+      exercise("Flat Dumbbell Bench Press", 3, "10–12", 60, "Middle chest. No arch."),
+      exercise("Lateral Raises (Volume)", 4, "15–20", 45, "Side delt pump."),
+      exercise("Rear Delt Machine Flyes", 3, "15–20", 45, "Rear delts."),
+      exercise("Incline Dumbbell Press (light)", 3, "12–15", 45, "Upper chest burnout. Last set: dropset."),
+      exercise("Incline Dumbbell Curls", 3, "12–15", 45, "Biceps. Incline bench (45°). Stretch the long head."),
+      exercise("Overhead Tricep Extension", 3, "12–15", 45, "Triceps. Seated with back support. One DB with both hands."),
+      exercise("Hammer Curls", 3, "10–12", 45, "Biceps. Last set: dropset."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher.")
     ]
   },
   {
@@ -155,15 +206,15 @@ const workouts = [
     cardioMinutes: 20,
     cardioMET: inclineWalkMET,
     exercises: [
-      "Lat Pulldowns (Wide, High Reps) — 3 x 15–20 — 45s — Light weight. Full stretch.",
-      "Dumbbell Pullovers (Slow Tempo) — 3 x 15–20 — 45s — 3-second negative. Deep lat stretch.",
-      "Lateral Raises (Moderate) — 3 x 12–15 — 45s — Side delts. Controlled tempo.",
-      "Cable Cross-overs — 3 x 15–20 — 45s — Inner chest. Squeeze at center.",
-      "Seated Dumbbell Shoulder Press — 3 x 10–12 — 60s — Shoulders. Back supported.",
-      "Hammer Curls — 3 x 12–15 — 45s — Biceps. Neutral grip. Builds brachialis.",
-      "Close-grip Bench Press (DB) — 3 x 10–12 — 45s — Triceps. Flat bench, feet flat.",
-      "Finisher: Face Pulls — 2 x 20 — 30s — Rear delt burnout.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher."
+      exercise("Lat Pulldowns (Wide, High Reps)", 3, "15–20", 45, "Light weight. Full stretch."),
+      exercise("Dumbbell Pullovers (Slow Tempo)", 3, "15–20", 45, "3-second negative. Deep lat stretch."),
+      exercise("Lateral Raises (Moderate)", 3, "12–15", 45, "Side delts. Controlled tempo."),
+      exercise("Cable Cross-overs", 3, "15–20", 45, "Inner chest. Squeeze at center."),
+      exercise("Seated Dumbbell Shoulder Press", 3, "10–12", 60, "Shoulders. Back supported."),
+      exercise("Hammer Curls", 3, "12–15", 45, "Biceps. Neutral grip. Builds brachialis."),
+      exercise("Close-grip Bench Press (DB)", 3, "10–12", 45, "Triceps. Flat bench, feet flat."),
+      exercise("Face Pulls", 2, "20", 30, "Rear delt burnout."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher.")
     ]
   },
   {
@@ -174,16 +225,16 @@ const workouts = [
     cardioMinutes: 20,
     cardioMET: inclineWalkMET,
     exercises: [
-      "Leg Press (Feet High & Wide) — 4 x 12–15 — 60s — Back braced. Hamstring focus.",
-      "Lying Leg Curls — 4 x 12–15 — 45s — Hamstrings. Control negative.",
-      "Leg Extensions — 3 x 15–20 — 45s — Quads. Light weight.",
-      "Glute Bridges (Bodyweight) — 3 x 25 — 45s — Glute activation.",
-      "Seated Calf Raises — 4 x 15–20 — 45s — Calves.",
-      "Preacher Curls — 3 x 10–12 — 45s — Biceps. Strict form.",
-      "EZ-Bar Skull Crushers — 3 x 12–15 — 45s — Triceps. Lower to forehead.",
-      "Core Finisher: Plank — 3 x 60s — 45s — Core.",
-      "Core Finisher: Side Plank — 3 x 45s per side — 45s — Core.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher."
+      exercise("Leg Press (Feet High & Wide)", 4, "12–15", 60, "Back braced. Hamstring focus."),
+      exercise("Lying Leg Curls", 4, "12–15", 45, "Hamstrings. Control negative."),
+      exercise("Leg Extensions", 3, "15–20", 45, "Quads. Light weight."),
+      exercise("Glute Bridges (Bodyweight)", 3, "25", 45, "Glute activation."),
+      exercise("Seated Calf Raises", 4, "15–20", 45, "Calves."),
+      exercise("Preacher Curls", 3, "10–12", 45, "Biceps. Strict form."),
+      exercise("EZ-Bar Skull Crushers", 3, "12–15", 45, "Triceps. Lower to forehead."),
+      exercise("Plank", 3, "60s", 45, "Core."),
+      exercise("Side Plank", 3, "45s per side", 45, "Core."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher.")
     ]
   },
   {
@@ -194,14 +245,14 @@ const workouts = [
     cardioMinutes: 20,
     cardioMET: inclineWalkMET,
     exercises: [
-      "Lateral Raises (Dropset) — 4 x 10+10+10 — 30s — Side delt burnout.",
-      "High-to-Low Cable Cross-overs — 4 x 12–15 — 45s — Lower chest.",
-      "Seated Arnold Press — 3 x 10–12 — 60s — Shoulders. Back supported.",
-      "EZ-Bar Skull Crushers — 3 x 12–15 — 45s — Triceps. No arch.",
-      "Preacher Curls — 3 x 10–12 — 45s — Biceps. Last set: dropset.",
-      "Tricep Pushdowns (Rope) — 3 x 12–15 — 45s — Triceps. Squeeze at bottom.",
-      "Dumbbell Curls (Strict) — 3 x 10–12 — 45s — Biceps. Last set: dropset.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher."
+      exercise("Lateral Raises (Dropset)", 4, "10+10+10", 30, "Side delt burnout."),
+      exercise("High-to-Low Cable Cross-overs", 4, "12–15", 45, "Lower chest."),
+      exercise("Seated Arnold Press", 3, "10–12", 60, "Shoulders. Back supported."),
+      exercise("EZ-Bar Skull Crushers", 3, "12–15", 45, "Triceps. No arch."),
+      exercise("Preacher Curls", 3, "10–12", 45, "Biceps. Last set: dropset."),
+      exercise("Tricep Pushdowns (Rope)", 3, "12–15", 45, "Triceps. Squeeze at bottom."),
+      exercise("Dumbbell Curls (Strict)", 3, "10–12", 45, "Biceps. Last set: dropset."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher.")
     ]
   },
   {
@@ -212,15 +263,15 @@ const workouts = [
     cardioMinutes: 35,
     cardioMET: lissWalkMET,
     exercises: [
-      "Decline Dumbbell Press — 4 x 10–12 — 60s — Lower chest.",
-      "High-to-Low Cable Cross-overs — 4 x 12–15 — 45s — Lower chest.",
-      "Dips (Bodyweight or Weighted) — 4 x 8–12 — 60s — Lower chest + triceps.",
-      "Incline Dumbbell Press (light) — 3 x 15–20 — 45s — Upper chest pump.",
-      "Cable Cross-overs (Flat/Mid) — 3 x 15–20 — 45s — Inner chest.",
-      "Cable Curls — 3 x 20–25 — 30s — Biceps finisher.",
-      "Cable Tricep Kickbacks — 3 x 20–25 — 30s — Triceps finisher.",
-      "Finisher: Push-ups — 3 x AMRAP — 30s — Chest burnout.",
-      "Finisher: Dips — 3 x 8–12 — 45s — Daily finisher."
+      exercise("Decline Dumbbell Press", 4, "10–12", 60, "Lower chest."),
+      exercise("High-to-Low Cable Cross-overs", 4, "12–15", 45, "Lower chest."),
+      exercise("Dips (Bodyweight or Weighted)", 4, "8–12", 60, "Lower chest + triceps."),
+      exercise("Incline Dumbbell Press (light)", 3, "15–20", 45, "Upper chest pump."),
+      exercise("Cable Cross-overs (Flat/Mid)", 3, "15–20", 45, "Inner chest."),
+      exercise("Cable Curls", 3, "20–25", 30, "Biceps finisher."),
+      exercise("Cable Tricep Kickbacks", 3, "20–25", 30, "Triceps finisher."),
+      exercise("Push-ups", 3, "AMRAP", 30, "Chest burnout."),
+      exercise("Dips", 3, "8–12", 45, "Daily finisher.")
     ]
   },
   {
@@ -239,28 +290,16 @@ function caloriesFromMET(met, minutes) {
   return Math.round((met * 3.5 * bodyWeightKg * minutes) / 200);
 }
 
-function parseRestSeconds(exercise) {
-  const match = exercise.match(/—\s*(\d+)s\s*—/);
-  return match ? Number(match[1]) : 45;
-}
-
-function parseSets(exercise) {
-  const match = exercise.match(/—\s*(\d+)\s*x\s*/i);
-  return match ? Number(match[1]) : 3;
-}
-
 function calculateWorkoutCalories(workout) {
   if (workout.rest) return 0;
 
-  const exerciseMinutes = workout.exercises.reduce((total, exercise) => {
-    const sets = parseSets(exercise);
-    const restSeconds = parseRestSeconds(exercise);
+  const exerciseMinutes = workout.exercises.reduce((total, item) => {
     const setWorkSeconds = 40;
     const transitionSeconds = 45;
 
     return total
-      + (sets * setWorkSeconds)
-      + ((sets - 1) * restSeconds)
+      + (item.sets * setWorkSeconds)
+      + ((item.sets - 1) * item.rest)
       + transitionSeconds;
   }, 0) / 60;
 
@@ -273,25 +312,20 @@ function calculateWorkoutCalories(workout) {
 workouts.forEach((workout) => {
   workout.calories = calculateWorkoutCalories(workout);
   workout.abs = workout.rest ? 0 : absCaloriesPerWorkout;
+  workout.videoUrl = workoutVideoUrl(workout.title);
 });
 
-function linkExercise(exercise) {
-  const separator = " — ";
-  const [name, ...details] = exercise.split(separator);
-  const cleanName = name.replace(/^Finisher:\s*/, "").replace(/^Core Finisher:\s*/, "");
-  const libraryId = exerciseLinks[cleanName];
+function renderExercise(item) {
+  const label = item.libraryId
+    ? `<a href="#${item.libraryId}">${escapeHtml(item.name)}</a>`
+    : escapeHtml(item.name);
 
-  const label = libraryId
-    ? `<a href="#${libraryId}">${escapeHtml(cleanName)}</a>`
-    : escapeHtml(cleanName);
-
-  const prefix = name.startsWith("Finisher:")
-    ? "Finisher: "
-    : name.startsWith("Core Finisher:")
-      ? "Core Finisher: "
-      : "";
-
-  return `<li>${prefix}${label}${details.length ? `${separator}${escapeHtml(details.join(separator))}` : ""}</li>`;
+  return `
+    <li>
+      ${label} — ${item.sets} x ${escapeHtml(item.reps)} — ${item.rest}s —
+      ${escapeHtml(item.notes)}
+    </li>
+  `;
 }
 
 function renderWorkoutCards() {
@@ -318,8 +352,13 @@ function renderWorkoutCards() {
         <p><strong>Post Workout Abs Calories:</strong> ${workout.abs} kcal</p>
         <p><strong>Total Estimated Calories:</strong> ${workout.calories + workout.abs} kcal</p>
         <p><strong>Cardio:</strong> ${escapeHtml(workout.cardio)}</p>
+        <p>
+          <a class="cta-secondary" href="${workout.videoUrl}" target="_blank" rel="noopener noreferrer">
+            Watch Workout How-To Videos
+          </a>
+        </p>
         <h4>The Workout</h4>
-        <ul>${workout.exercises.map(linkExercise).join("")}</ul>
+        <ul>${workout.exercises.map(renderExercise).join("")}</ul>
       </article>
     `;
   }).join("");
@@ -332,7 +371,13 @@ function renderSchedule() {
   tbody.innerHTML = workouts.map((workout) => `
     <tr>
       <td>${escapeHtml(workout.title.split(":")[0])}</td>
-      <td>${escapeHtml(workout.title.split(": ").slice(1).join(": "))}</td>
+      <td>
+        ${escapeHtml(workout.title.split(": ").slice(1).join(": "))}
+        <br />
+        <a href="${workout.videoUrl}" target="_blank" rel="noopener noreferrer">
+          How-to videos
+        </a>
+      </td>
       <td>${escapeHtml(workout.focus)}</td>
       <td>${workout.rest ? "—" : `${workout.calories} kcal`}</td>
       <td>${workout.rest ? "—" : `${workout.abs} kcal`}</td>
@@ -348,15 +393,23 @@ function updatePlanLabels() {
   const absInstruction = document.querySelector("#abs p strong");
 
   if (frequency) frequency.textContent = `${trainingDays} training days per week`;
+
   if (absInstruction) {
-    absInstruction.textContent = "Do this after each training-day workout; skip it on Sunday rest";
+    absInstruction.textContent =
+      "Do this after each training-day workout; skip it on Sunday rest";
   }
 }
 
 function recalculatePlanValues() {
   const trainingWorkouts = workouts.filter((workout) => !workout.rest);
-  const weeklyWorkoutCalories = trainingWorkouts.reduce((total, workout) => total + workout.calories, 0);
-  const weeklyAbsCalories = trainingWorkouts.reduce((total, workout) => total + workout.abs, 0);
+  const weeklyWorkoutCalories = trainingWorkouts.reduce(
+    (total, workout) => total + workout.calories,
+    0
+  );
+  const weeklyAbsCalories = trainingWorkouts.reduce(
+    (total, workout) => total + workout.abs,
+    0
+  );
   const weeklyTotalCalories = weeklyWorkoutCalories + weeklyAbsCalories;
   const scheduleSummary = document.querySelector("#schedule .summary-card");
 
@@ -384,7 +437,6 @@ function recalculatePlanValues() {
 
 function setupNavigationObserver() {
   const sections = document.querySelectorAll("section[id], header.hero[id]");
-  const workoutCards = document.querySelectorAll(".workout-card");
 
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
@@ -392,27 +444,34 @@ function setupNavigationObserver() {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
 
-          navLinks.forEach((link) => link.classList.remove("active"));
-          const activeLink = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          const activeLink = document.querySelector(
+            `.nav-links a[href="#${entry.target.id}"]`
+          );
 
-          if (activeLink) activeLink.classList.add("active");
+          // Workout cards and sections without nav links do not clear the active link.
+          if (!activeLink) return;
+
+          navLinks.forEach((link) => link.classList.remove("active"));
+          activeLink.classList.add("active");
         });
       },
       { rootMargin: "-40% 0px -50% 0px", threshold: 0.1 }
     );
 
     sections.forEach((section) => observer.observe(section));
-    workoutCards.forEach((card) => observer.observe(card));
   } else {
     const updateActiveNavigation = () => {
       let currentId = "home";
 
-      document.querySelectorAll("header.hero[id], section[id], .workout-card[id]").forEach((section) => {
+      document.querySelectorAll("header.hero[id], section[id]").forEach((section) => {
         if (window.scrollY >= section.offsetTop - 180) currentId = section.id;
       });
 
       navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === `#${currentId}`);
+        link.classList.toggle(
+          "active",
+          link.getAttribute("href") === `#${currentId}`
+        );
       });
     };
 
